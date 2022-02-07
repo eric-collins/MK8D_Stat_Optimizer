@@ -1,0 +1,5 @@
+"0",""
+"0","karts <- as_tibble(as.data.frame(kart_tables_fixed[1]))"
+"2","Error in as_tibble(as.data.frame(kart_tables_fixed[1])) : 
+  could not find function ""as_tibble""
+"

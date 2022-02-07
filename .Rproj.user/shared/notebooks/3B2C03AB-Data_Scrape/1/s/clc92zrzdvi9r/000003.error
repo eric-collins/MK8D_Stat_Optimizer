@@ -1,0 +1,1 @@
+{"frames":[],"message":"Error in as_tibble(as.data.frame(kart_tables_fixed[1])) : \n  could not find function \"as_tibble\"\n"}

@@ -1,0 +1,304 @@
+---
+title: "Data Wrangling"
+author: "Eric Collins"
+date: "2/3/2022"
+output: html_document
+---
+```{r}
+library(tidyverse)
+
+
+karts <- read_csv("karts.csv")
+characters <- read_csv("characters.csv")
+tires <- read_csv("tires.csv")
+gliders <- read_csv("gliders.csv")
+
+```
+```{r}
+karts <- karts %>%
+        mutate(body = case_when(
+                body == "BiddybuggyBuggybud" ~ "Biddybuggy",
+                body == "SneekerBounder" ~ "Sneeker",
+                body == "Sports CoupeSports Coupé" ~ "Sports Coupe",
+                body == "Gold StandardGold Kart" ~ "Gold Standard",
+                body == "Mr. ScootyMr Scooty" ~ "Mr. Scooty", 
+                body == "Standard ATVStandard Quad" ~ "Standard ATV", 
+                TRUE ~ body
+        )) %>%
+        drop_na()
+
+
+characters <- characters %>%
+        mutate(driver = str_sub(driver,1,nchar(driver)-3)) %>%
+        mutate(driver = gsub("([a-z])([A-Z])","\\1 \\2",driver)) %>%
+        separate(driver, into = c("keep1", "keep2", "drop1", "drop2")) %>%
+        mutate(drop1 = if_else(nchar(drop1) < 2, NA_character_, drop1),
+               keep2 = if_else(nchar(keep2) < 2, NA_character_, keep2)) %>%
+        replace_na(list(keep1 = "", keep2 = "", drop1 = "")) %>%
+        mutate(driver = str_c(keep1, keep2, drop1, sep = " ")) %>%
+        select(-c(keep1, keep2, drop1, drop2)) %>%
+        drop_na() %>%
+        relocate(driver) %>%
+        mutate(driver = str_trim(driver))
+
+
+
+tires <- tires %>%
+        mutate(tire = case_when(
+                tire == "StandardNormal" ~ "Standard",
+                tire == "WoodWooden" ~ "Wood",
+                tire == "Blue StandardNormal Blue" ~ "Blue Standard",
+                tire == "Hot MonsterFunky Monster" ~ "Hot Monster",
+                tire == "Gold TiresGold Wheels" ~ "Gold Tires",
+                tire == "GLA TiresGLA Wheels" ~ "GLA Tires",
+                tire == "Triforce TiresTriforce Tyres" ~ "Triforce Tires",
+                tire == "Leaf TiresLeaf Tyres" ~ "Leaf Tires",
+                TRUE ~ tire
+        )) %>%
+        drop_na()
+
+```
+
+
+```{r}
+
+kart_dupes <- karts %>%
+        mutate(key = as.character(paste0(wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg)))
+
+kart_out <- kart_dupes %>%
+        mutate(bodies = NA_character_) %>%
+        slice(0)
+
+keys <- unique(kart_dupes$key)
+
+
+for(kart_key in keys){
+        
+        #print(kart_key)
+        new_dupes <-  kart_dupes %>%
+                filter(key == kart_key)
+        
+        bodies <- new_dupes %>%
+                select(1)
+
+        list <- as.list(bodies[[1]])
+        
+        y <- toString(list)
+        
+        z <- new_dupes %>%
+                mutate(bodies = y)
+        
+        kart_out <- bind_rows(kart_out, z)
+        
+}
+
+kart_output <- kart_out %>%
+        select(-c(body, key)) %>%
+        distinct() %>%
+        relocate(bodies) %>%
+        setNames(paste0("karts.", names(kart_out)))
+
+
+```
+
+
+
+```{r}
+tire_dupes <- tires %>%
+        mutate(key = as.character(paste0(wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg)))
+
+tire_out <- tire_dupes %>%
+        mutate(tires = NA_character_) %>%
+        slice(0)
+
+keys <- unique(tire_dupes$key)
+
+
+for(tire_key in keys){
+        
+        #print(kart_key)
+        new_dupes <-  tire_dupes %>%
+                filter(key == tire_key)
+        
+        wheels <- new_dupes %>%
+                select(1)
+
+        list <- as.list(wheels[[1]])
+        
+        y <- toString(list)
+        
+        z <- new_dupes %>%
+                mutate(tires = y)
+        
+        tire_out <- bind_rows(tire_out, z)
+        
+}
+
+
+tire_output <- tire_out %>%
+        select(-c(tire, key)) %>%
+        distinct() %>%
+        relocate(tires) %>%
+        setNames(paste0("tires.", names(tire_out)))
+
+
+```
+
+
+
+
+
+```{r}
+char_dupes <- characters %>%
+        mutate(key = as.character(paste0(wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg)))
+
+char_out <- char_dupes %>%
+        mutate(drivers = NA_character_) %>%
+        slice(0)
+
+keys <- unique(char_dupes$key)
+
+
+for(char_key in keys){
+        
+        #print(kart_key)
+        new_dupes <-  char_dupes %>%
+                filter(key == char_key)
+        
+        chars <- new_dupes %>%
+                select(1)
+
+        list <- as.list(chars[[1]])
+        
+        y <- toString(list)
+        
+        z <- new_dupes %>%
+                mutate(drivers = y)
+        
+        char_out <- bind_rows(char_out, z)
+        
+}
+
+char_output <- char_out %>%
+        select(-c(driver, key)) %>%
+        relocate(drivers) %>%
+        distinct() %>%
+        setNames(paste0("char.", names(char_out)))
+
+```
+
+
+
+
+
+```{r}
+glider_dupes <- gliders %>%
+        mutate(key = as.character(paste0(wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg)))
+
+glider_out <- glider_dupes %>%
+        mutate(glider = NA_character_) %>%
+        slice(0)
+
+keys <- unique(glider_dupes$key)
+
+
+for(glider_key in keys){
+        
+        #print(kart_key)
+        new_dupes <-  glider_dupes %>%
+                filter(key == glider_key)
+        
+        glides <- new_dupes %>%
+                select(1)
+
+        list <- as.list(glides[[1]])
+        
+        y <- toString(list)
+        
+        z <- new_dupes %>%
+                mutate(gliders = y)
+        
+        glider_out <- bind_rows(glider_out, z)
+        
+}
+
+glider_output <- glider_out %>%
+        select(-c(glider, key)) %>%
+        distinct() %>%
+        relocate(gliders) %>%
+        setNames(paste0("glider.", names(glider_out)))
+```
+
+
+
+
+```{r}
+
+characters_karts <- crossing(char_output, kart_output, .name_repair = 'unique') %>%
+        drop_na()
+
+ck_tires <- crossing(characters_karts, tire_output, .name_repair = 'unique') %>%
+        drop_na()
+
+all <- crossing(ck_tires, glider_output, .name_repair = 'unique') %>%
+        drop_na()
+
+```
+
+
+```{r}
+all_temp <- all %>%
+        mutate(raw_wg = (all %>% select(ends_with("wg")) %>% rowSums()),
+               raw_ac = (all %>% select(ends_with("ac")) %>% rowSums()),
+               raw_on = (all %>% select(ends_with("on")) %>% rowSums()),
+               raw_of = (all %>% select(ends_with("of")) %>% rowSums()),
+               raw_mt = (all %>% select(ends_with("mt")) %>% rowSums()),
+               raw_sl = (all %>% select(ends_with("sl")) %>% rowSums()),
+               raw_sw = (all %>% select(ends_with("sw")) %>% rowSums()),
+               raw_sa = (all %>% select(ends_with("sa")) %>% rowSums()),
+               raw_sg = (all %>% select(ends_with("sg")) %>% rowSums()),
+               raw_tl = (all %>% select(ends_with("tl")) %>% rowSums()),
+               raw_tw = (all %>% select(ends_with("tw")) %>% rowSums()),
+               raw_ta = (all %>% select(ends_with("ta")) %>% rowSums()),
+               raw_tg = (all %>% select(ends_with("tg")) %>% rowSums())
+               ) %>%
+        mutate(
+                Weight = (raw_wg + 3) / 4,
+                Acceleration = (raw_ac +3) /4,
+                "On-Road Traction" = (raw_on + 3)/4,
+                "Off-Road Traction" = (raw_of + 3)/4,
+                "Mini Turbo" = (raw_mt +3) /4,
+                "Ground Speed" = (raw_sl +3)/4,
+                "Water Speed" = (raw_sw +3) /4,
+                "Anti-Gravity Speed" = (raw_sa+3)/4,
+                "Air Speed" = (raw_sg+3)/4,
+                "Ground Handling" = (raw_tl+3) /4,
+                "Water Handling" = (raw_tw+3)/4,
+                "Anti-Gravity Handling" = (raw_ta+3)/4,
+                "Air Handling" = (raw_tg +3)/4
+        )
+
+
+all_stats <- all_temp %>%
+        select(Driver = char.driver, Kart = karts.body, Tires = tires.tire, Glider = glider.glider, Weight:`Air Handling`) %>%
+        mutate(key = as.character(paste0(Weight, Acceleration, `On-Road Traction`, `Off-Road Traction`, `Mini Turbo`, `Ground Speed`, `Water Speed`, `Anti-Gravity Speed`, `Air Speed`, `Ground Speed`, `Water Handling`, `Anti-Gravity Handling`, `Air Handling`)))
+
+
+```
+
+```{r}
+long_stats <- all_stats %>%
+        pivot_longer(cols = "Weight":"Air Handling", names_to = "stat", values_to = 'value')
+        
+        
+        
+```
+
+
+
+```{r}
+write_csv(all_stats, "all_stats_wide.csv")
+write_csv(long_stats, "all_stats_long.csv")
+
+```
+

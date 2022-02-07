@@ -1,0 +1,51 @@
+"0","library(tidyverse)"
+"0",""
+"0",""
+"0","karts <- read_csv(""karts.csv"")"
+"1","[1mRows: [22m[34m40[39m [1mColumns: [22m[34m14[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-----------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (1): body
+[32mdbl[39m (13): wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"0","characters <- read_csv(""characters.csv"")"
+"1","[1mRows: [22m[34m44[39m [1mColumns: [22m[34m14[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-----------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (1): driver
+[32mdbl[39m (13): wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"0","tires <- read_csv(""tires.csv"")"
+"1","[1mRows: [22m[34m21[39m [1mColumns: [22m[34m14[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-----------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (1): tire
+[32mdbl[39m (13): wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"
+"0","gliders <- read_csv(""gliders.csv"")"
+"1","[1mRows: [22m[34m14[39m [1mColumns: [22m[34m14[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-----------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (1): glider
+[32mdbl[39m (13): wg, ac, on, of, mt, sl, sw, sa, sg, tl, tw, ta, tg
+"
+"1","
+[36mi[39m Use [38;5;251m[48;5;235m[38;5;251m[48;5;235m`spec()`[48;5;235m[38;5;251m[49m[39m to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set [38;5;251m[48;5;235m[38;5;251m[48;5;235m`show_col_types = FALSE`[48;5;235m[38;5;251m[49m[39m to quiet this message.
+"

@@ -1,0 +1,121 @@
+---
+title: "Data Grabbing and Wrangling"
+output: html_notebook
+---
+
+```{r}
+library(rvest)
+library(tidyverse)
+library(janitor)
+library(feather)
+```
+
+```{r}
+url <- "https://www.mariowiki.com/Mario_Kart_8_Deluxe_in-game_statistics"
+
+kart_page <- read_html(url)
+
+str(kart_page)
+```
+
+
+```{r}
+nodes <- kart_page %>%
+        html_elements("body") %>%
+        html_children()
+
+nodes %>%
+        html_children()
+```
+
+```{r}
+kart_tables <- kart_page %>%
+        html_table(fill = TRUE)
+
+kart_tables1 <- kart_tables[c(2:10)]
+kart_tables2 <- kart_tables[c(11:12)]
+
+fix_names_1 <- function(x){
+        new_x <- x %>%
+                row_to_names(row_number = 1) %>%
+                clean_names()
+        
+        dont <- names(new_x)[1]
+        
+        new_x <- new_x %>%
+                mutate(across(!dont, as.numeric))
+}
+
+fix_names_2 <- function(x){
+        new_x <- x %>%
+                row_to_names(row_number = 2) %>%
+                clean_names()
+        
+        dont <- names(new_x)[1]
+        
+        new_x <- new_x %>%
+                mutate(across(!dont, as.numeric))
+}
+
+kart_tables_fixed1 <- lapply(kart_tables1, fix_names_1)
+kart_tables_fixed2 <- lapply(kart_tables2, fix_names_2)
+
+
+kart_tables_fixed <- append(kart_tables_fixed1, kart_tables_fixed2)
+```
+
+
+
+```{r}
+
+karts <- as_tibble(as.data.frame(kart_tables_fixed[1]))
+characters <- as_tibble(as.data.frame(kart_tables_fixed[2]))
+tires <- as_tibble(as.data.frame(kart_tables_fixed[3]))
+gliders <- as_tibble(as.data.frame(kart_tables_fixed[4]))
+kart_mass <- as_tibble(as.data.frame(kart_tables_fixed[5]))
+acceleration <- as_tibble(as.data.frame(kart_tables_fixed[6]))
+slip <- as_tibble(as.data.frame(kart_tables_fixed[7]))
+offroad_brake <- as_tibble(as.data.frame(kart_tables[9])) %>%
+        slice(1:22) %>%
+        row_to_names(row_number = 1) %>%
+        clean_names()
+        
+offroad_slip <- as_tibble(as.data.frame(kart_tables[9])) %>%
+        slice(23:45) %>%
+        row_to_names(row_number = 1) %>%
+        clean_names() 
+
+boost <- as_tibble(as.data.frame(kart_tables_fixed[9]))
+speed <- as_tibble(as.data.frame(kart_tables_fixed[10]))
+handling <- as_tibble(as.data.frame(kart_tables_fixed[11]))
+
+
+write_csv(karts, "karts.csv")
+write_csv(characters, "characters.csv")
+write_csv(tires, "tires.csv")
+write_csv(gliders, "gliders.csv")
+write_csv(kart_mass, "kart_mass.csv")
+write_csv(acceleration, "acceleration.csv")
+write_csv(slip, "slip.csv")
+write_csv(offroad_brake, "offroad_brake.csv")
+write_csv(offroad_slip, "offroad_slip.csv")
+write_csv(boost, "boost.csv")
+write_csv(speed, "speed.csv")
+write_csv(handling, "handling.csv")
+
+
+
+write_feather(karts, "karts.feather")
+write_feather(characters, "characters.feather")
+write_feather(tires, "tires.feather")
+write_feather(gliders, "gliders.feather")
+write_feather(kart_mass, "kart_mass.feather")
+write_feather(acceleration, "acceleration.feather")
+write_feather(slip, "slip.feather")
+write_feather(offroad_brake, "offroad_brake.feather")
+write_feather(offroad_slip, "offroad_slip.feather")
+write_feather(boost, "boost.feather")
+write_feather(speed, "speed.feather")
+write_feather(handling, "handling.feather")
+```
+

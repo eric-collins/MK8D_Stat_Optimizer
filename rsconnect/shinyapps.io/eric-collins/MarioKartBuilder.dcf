@@ -1,0 +1,14 @@
+name: MarioKartBuilder
+title: MarioKartBuilder
+username:
+account: eric-collins
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5600148
+bundleId: 5553433
+url: https://eric-collins.shinyapps.io/MarioKartBuilder/
+when: 1644261179.71404
+lastSyncTime: 1644261179.71404
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: acceleration.csv|all_stats.csv|boost.csv|characters.csv|Data Wrangling.Rmd|Data_Scrape.nb.html|Data_Scrape.Rmd|gliders.csv|handling.csv|kart_mass.csv|karts.csv|offroad_brake.csv|offroad_slip.csv|slip.csv|speed.csv|tires.csv
